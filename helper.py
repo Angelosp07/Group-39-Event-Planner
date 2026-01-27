@@ -17,18 +17,18 @@ def parse_file(file):
     try:
         with open(file, encoding='UTF-8') as f:
             #read first, second line and extract values
-            total_activities = int(f.readline().rstrip())
+            total_activities = int(f.readline().strip())
             second_line = f.readline().split()
-            total_time = int(second_line[0])
-            total_money = int(second_line[1])
+            max_time = int(second_line[0])
+            max_money = int(second_line[1])
 
             for line in f:
                 #read remaining lines to extract activities
                 fields = line.rstrip().split()
                 #ensuring correct types for each field
-                activity = [fields[0],int(fields[1]), int(fields[2]), int(fields[3])]
+                activity = (fields[0],int(fields[1]), int(fields[2]), int(fields[3]))
                 activities.append(activity)
-        return total_activities, total_time, total_money, activities
+        return total_activities, max_time, max_money, activities
 
     except FileNotFoundError:
         print("file not found")
