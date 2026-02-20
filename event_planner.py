@@ -21,15 +21,17 @@ def brute_force(total_activities, max_time, max_money, activities):
         for i, bit in enumerate(mask):
             if bit == "1":
                 #append to chosen list, record totals of fields
+                name, time, cost, enjoyment = activities[i]
+                total_time += time
+                total_cost += cost
+
+                if total_time > max_time or total_cost > max_money:
+                    break
+                    
+                total_enjoyment += enjoyment
                 chosen_activities.append(activities[i])
-                total_time += activities[i][1]
-                total_cost += activities[i][2]
-                total_enjoyment += activities[i][3]
-        #check against constraints
-        if total_time <= max_time and total_cost <= max_money:
-            #check against current best combo
+        else:
             if total_enjoyment > highest_enjoyment:
-                #update best enjoyment, activities
                 highest_enjoyment = total_enjoyment
                 best_activities = chosen_activities
 
@@ -37,16 +39,20 @@ def brute_force(total_activities, max_time, max_money, activities):
 
 def generate_masks(total_activities):
     num_masks = 2 ** total_activities
-    masks = []
-    for num in range(num_masks):
-        #convert denary to binary string, format, and add leading 0's
-        mask = str(bin(num))[2:].zfill(total_activities)
-        masks.append(mask)
+    masks = [
+        bin(num)[2:].zfill(total_activities)
+        for num in range(num_masks)
+    ]
+  
     return masks
 
+if __name__ == "__main__":
+    total_activities, max_time, max_money, activities = parse_file(
+        "input_files/input_medium.txt"
+    )
 
+    print(total_activities, max_time, max_money, activities)
 
+    x, y = brute_force(total_activities, max_time, max_money, activities)
 
-x, y = brute_force(total_activities, max_time, max_money, activities)
-
-print(f"\n{x}\n \n {y}")
+    print(f"\n{x}\n \n {y}")
