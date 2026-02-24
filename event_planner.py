@@ -1,11 +1,14 @@
 """ Module containing brute force and dynamic programming solutions to event planner problem """
 
 from helper import parse_file
+import time 
 
 def brute_force(total_activities, max_time, max_money, activities):
     masks = generate_masks(total_activities)
     highest_enjoyment = 0
     best_activities = []
+    best_time = 0
+    best_cost = 0
 
     #for each mask
     for mask in masks:
@@ -30,8 +33,10 @@ def brute_force(total_activities, max_time, max_money, activities):
             if total_enjoyment > highest_enjoyment:
                 highest_enjoyment = total_enjoyment
                 best_activities = chosen_activities
+                best_time = total_time
+                best_cost = total_cost
 
-    return highest_enjoyment, best_activities
+    return highest_enjoyment, best_time, best_cost, best_activities
 
 def generate_masks(total_activities):
     num_masks = 2 ** total_activities
@@ -101,35 +106,85 @@ def dynamic_programming_time_money(total_activities, max_time, max_money, activi
     chosen_activities = []
     t = max_time
     m = max_money
+    best_time = 0
+    best_cost = 0
 
     for i in range(total_activities, 0, -1):
         if dp[i][t][m] != dp[i - 1][t][m]:
             activity = activities[i - 1]
             chosen_activities.append(activity)
+
+            best_time += activity[1]
+            best_cost += activity[2]
             
             t -= activity[1]
             m -= activity[2]
 
     chosen_activities.reverse()
-    return highest_enjoyment, chosen_activities
+    return highest_enjoyment, best_time, best_cost, chosen_activities
 
 
 if __name__ == "__main__":
-    file = input("Enter filename: ")
-
-    total_activities, max_time, max_money, activities = parse_file(file)
-
-    if activities is not None:
-        best_enjoyment, chosen = dynamic_programming_time_money(
-            total_activities, max_time, max_money, activities
-        )
-
-        print("\nBest enjoyment:", best_enjoyment)
-        print("\nChosen activities:")
-
-        for activity in chosen:
-            print(activity)
-
-        x, y = brute_force(total_activities, max_time, max_money, activities)
+    activities = None
     
-        print(f"Brute force result:\n{x}\n\n {y}")
+    while activities is None:
+        file = input("Enter filename: ")
+        total_activities, max_time, max_money, activities = parse_file(file)
+
+        if activities is None:
+            print("No activities found in file, try again")
+
+    print()
+    print("File parsed successfully.")
+    print()
+    print("========================================")
+    print("EVENT PLANNER - RESULTS")
+    print("========================================")
+    print()
+
+    print(f"Input File: {file.split('/')[-1]}")
+    print(f"Available Time: {max_time} hours")
+    print(f"Available Budget: £{max_money}")
+    print()
+    print("--- BRUTE FORCE ALGORITHM ---")
+
+    start_time = time.perf_counter()
+    highest_enjoyment, best_time, best_cost, best_activities = brute_force(total_activities, max_time, max_money, activities)
+    end_time = time.perf_counter()
+
+    print("Selected Activities:")
+    for activity in best_activities:
+        print(f" - {activity[0]} ({activity[1]} hours, £{activity[2]}, enjoyment: {activity[3]})")
+    print()
+
+    print(f"Total Enjoyment: {highest_enjoyment}")
+    print(f"Total Time Used: {best_time} hours")
+    print(f"Total Cost: £{best_cost}")
+    print()
+
+    print(f"Execution Time: {end_time - start_time:.3f} seconds")
+    print()
+
+    print("--- DYNAMIC PROGRAMMING ALGORITHM ---")
+    start_time = time.perf_counter()
+    highest_enjoyment, best_time, best_cost, best_activities = dynamic_programming_time_money(total_activities, max_time, max_money, activities)
+    end_time = time.perf_counter()
+
+    print("Selected Activities:")
+    for activity in best_activities:
+        print(f" - {activity[0]} ({activity[1]} hours, £{activity[2]}, enjoyment: {activity[3]})")
+    print()
+
+    print(f"Total Enjoyment: {highest_enjoyment}")
+    print(f"Total Time Used: {best_time} hours")
+    print(f"Total Cost: £{best_cost}")
+    print()
+
+    print(f"Execution Time: {end_time - start_time:.3f} seconds")
+    print()
+    
+    print("========================================")
+
+
+        
+
