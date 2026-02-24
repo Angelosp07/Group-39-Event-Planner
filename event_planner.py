@@ -44,6 +44,37 @@ def generate_masks(total_activities):
 
 def dynamic_programming_time(total_activities, max_time, max_money, activities):
 
+    dp = [[0] * (max_time + 1) for _ in range(total_activities + 1)]
+
+    # Build dp table
+    for i in range(1, total_activities + 1):
+        name, time_i, _, enjoy_i = activities[i - 1]
+
+        for t in range(max_time + 1):
+
+            if t >= time_i:
+                dp[i][t] = max(dp[i - 1][t], dp[i - 1][t - time_i] + enjoy_i)
+            else:
+                dp[i][t] = dp[i - 1][t]
+
+
+    highest_enjoyment = dp[total_activities][max_time]
+
+    # backtrack to find chosen activities
+    chosen_activities = []
+    t = max_time
+
+    for i in range(total_activities, 0, -1):
+        if dp[i][t] != dp[i - 1][t]:
+            activity = activities[i - 1]
+            chosen_activities.append(activity)
+            t -= activity[1]
+
+    chosen_activities.reverse()
+    return highest_enjoyment, chosen_activities
+
+def dynamic_programming_time_money(total_activities, max_time, max_money, activities):
+
     #3D dp table
     dp = [[[0] * (max_money + 1) for _ in range(max_time + 1)]
           for _ in range(total_activities + 1)]
@@ -89,7 +120,7 @@ if __name__ == "__main__":
     total_activities, max_time, max_money, activities = parse_file(file)
 
     if activities is not None:
-        best_enjoyment, chosen = dynamic_programming_time(
+        best_enjoyment, chosen = dynamic_programming_time_money(
             total_activities, max_time, max_money, activities
         )
 
