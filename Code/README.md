@@ -29,26 +29,19 @@ ECM1414 data structures and algorithms group 39 event planner project
 
 ## Brief overview of file structure
 
-Group-39-Event-Planner
-|
-|___ Code/
-|    |___ event_planner.py
-|    |___ README.md
-|    |___ helper.py
-|    |___ greedy_heuristic.py
-|    |___ analysis_and_visualisation.py
-|
-|___ Input_Files/
-    |___ input_10.txt
-     |___ input_100.txt
-     |___ input_200.txt
-     |___ input_500.txt
-     |___ input_1000.txt
-     |___ input_large.txt
-     |___ input_medium.txt
-     |___ input_small.txt
-
-
-
-
-
+* Group-39-Event-Planner/
+    * Code/
+        * event_planner.py
+        * README.md
+        * helper.py
+        * greedy_heuristic.py
+        * analysis_and_visualisation.py
+    * Input_Files/
+        * input_10.txt
+        * input_100.txt
+        * input_200.txt
+        * input_500.txt
+        * input_1000.txt
+        * input_large.txt
+        * input_medium.txt
+        * input_small.txt
