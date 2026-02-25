@@ -5,7 +5,9 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-total_activities, max_time, max_money, activities = parse_file("input_files/input_100.txt")
+print("Enter file name with >= 28 different activities: ")
+file = input()
+total_activities, max_time, max_money, activities = parse_file(file)
 
 n = [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28]
 
